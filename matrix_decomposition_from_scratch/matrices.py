@@ -56,6 +56,12 @@ class Matrix():
         return Matrix(self._calc_all_elements(
             other, lambda l, r: l + r))
 
+    def __sub__(self, other):
+        u"""全要素をそれぞれ減算する"""
+        self._verificate_shape_is_same(other)
+        return Matrix(self._calc_all_elements(
+            other, lambda l, r: l - r))
+
     def _verificate_shape_is_same(self, other):
         if self.col != other.col or self.row != other.row:
             raise ValueError('Shape of both should be same')
