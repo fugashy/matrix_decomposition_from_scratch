@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 class Matrix():
     def __init__(self, data):
         if type(data) is not list:
@@ -16,7 +15,8 @@ class Matrix():
         self.data = \
             [
                 [
-                    float(value) for value in row_data
+                    float(value)
+                    for value in row_data
                 ]
                 for row_data in data
             ]
@@ -30,7 +30,7 @@ class Matrix():
         return len(self.data[0])
 
     def __repr__(self):
-        return 'Matrix()'
+        return str(self.data)
 
     def __str__(self):
         ret_str = '['
