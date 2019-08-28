@@ -49,3 +49,23 @@ class Matrix():
                 ret_str += ']'
         ret_str += ']'
         return ret_str
+
+    def __add__(self, other):
+        u"""全要素をそれぞれ加算する"""
+        self._verificate_shape_is_same(other)
+        return Matrix(self._calc_all_elements(
+            other, lambda l, r: l + r))
+
+    def _verificate_shape_is_same(self, other):
+        if self.col != other.col or self.row != other.row:
+            raise ValueError('Shape of both should be same')
+
+    def _calc_all_elements(self, other, operator):
+        return \
+            [
+                [
+                    operator(self.data[ir][ic], other.data[ir][ic])
+                    for ic in range(self.col)
+                ]
+                for ir in range(self.row)
+            ]
