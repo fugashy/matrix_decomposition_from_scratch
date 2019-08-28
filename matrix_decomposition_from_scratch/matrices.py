@@ -30,7 +30,7 @@ class Matrix():
         return len(self.data[0])
 
     def __repr__(self):
-        return str(self.data)
+        return self.__str__()
 
     def __str__(self):
         ret_str = '['
