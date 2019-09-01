@@ -69,7 +69,10 @@ class Matrix():
             other, lambda l, r: l * r))
 
     def __truediv__(self, other):
-        u"""全要素をそれぞれ乗算する"""
+        u"""全要素をそれぞれ除算する
+
+        なお，0除算エラーはpythonの挙げる例外に身を任せる
+        """
         self._verificate_shape_is_same(other)
         return Matrix(self._calc_all_elements(
             other, lambda l, r: l / r))
