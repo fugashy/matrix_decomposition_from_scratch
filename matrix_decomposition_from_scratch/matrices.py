@@ -29,6 +29,29 @@ class Matrix():
     def col(self):
         return len(self.data[0])
 
+    def dot(self, other):
+        u"""InnerProductを計算する"""
+        # 同じ型同士でなければならない
+        if not isinstance(other, Matrix):
+            raise TypeError('dot function requires object type of Matrix')
+
+        # 左の列と右の行が一致しているか
+        if self.col != other.row:
+            raise ValueError('dot requires the condiction self.col == self.row')
+
+        return \
+            [
+                [
+                    sum(
+                        [
+                            self.data[i][k] * other.data[k][j]
+                            for k in range(self.col)
+                        ])
+                    for j in range(self.row)
+                ]
+                for i in range(other.col)
+            ]
+
     def __repr__(self):
         return self.__str__()
 
