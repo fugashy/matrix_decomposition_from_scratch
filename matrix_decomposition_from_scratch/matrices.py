@@ -52,6 +52,23 @@ class Matrix():
                 for i in range(self.row)
             ]
 
+    def __getitem__(self, key):
+        if type(key) is tuple:
+            if len(key) != 2:
+                raise IndexError('If you access the element, length of indices should be 2')
+            if type(key[0]) is not int or type(key[0]) != type(key[1]):
+                raise TypeError(
+                    'Type of index should be int\n'
+                    'Slicing is not supported yes...')
+
+            return self.data[key[0]][key[1]]
+        elif type(key) is int:
+            return self.data[key]
+        else:
+            raise TypeError(
+                'Type of index should be int\n'
+                'Slicing is not supported yes...')
+
     def __repr__(self):
         return self.__str__()
 
