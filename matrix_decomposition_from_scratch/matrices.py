@@ -47,9 +47,9 @@ class Matrix():
                             self.data[i][k] * other.data[k][j]
                             for k in range(self.col)
                         ])
-                    for j in range(self.row)
+                    for j in range(other.col)
                 ]
-                for i in range(other.col)
+                for i in range(self.row)
             ]
 
     def __repr__(self):
