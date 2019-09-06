@@ -53,10 +53,43 @@ class Matrix():
             ]
 
     def det(self):
+        u"""行列式を計算する
+
+        正方行列にのみ定義された量である
+
+        3x3まではサラスの公式を使う
+        それよりも大きい行列の場合は展開する
+        """
         if self.col != self.row:
             raise ValueError('Col and Row should be the same to compute determinant')
 
-        raise NotImplementedError('determinant function is not implemented yet...')
+        if self.row == 1:
+            return self[0, 0]
+        elif self.row == 2:
+            return self[0, 0] * self[1, 1] - self[0, 1] * self[1, 0]
+        elif self.row == 3:
+            return \
+                (self[0, 0] * self[1, 1] * self[2, 2]) + \
+                (self[0, 1] * self[1, 2] * self[2, 0]) + \
+                (self[0, 2] * self[1, 0] * self[2, 1]) - \
+                (self[0, 0] * self[1, 2] * self[2, 1]) - \
+                (self[0, 1] * self[1, 0] * self[2, 2]) - \
+                (self[0, 2] * self[1, 1] * self[2, 0])
+        else:
+            # 再帰的に展開してサラスの公式が使えるところまで落とす
+            sum = 0.0
+            for i in range(self.row):
+                m = Matrix(
+                    [
+                        [
+                            self[k, j]
+                            for j in range(self.row)
+                            if j != i
+                        ]
+                        for k in range(1, self.row)
+                    ])
+                sum += (-1.)**i * self[0, i] * m.det()
+            return sum
 
     def __getitem__(self, key):
         if type(key) is tuple:
