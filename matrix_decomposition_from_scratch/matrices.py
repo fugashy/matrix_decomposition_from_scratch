@@ -52,6 +52,12 @@ class Matrix():
                 for i in range(self.row)
             ]
 
+    def det(self):
+        if self.col != self.row:
+            raise ValueError('Col and Row should be the same to compute determinant')
+
+        raise NotImplementedError('determinant function is not implemented yet...')
+
     def __getitem__(self, key):
         if type(key) is tuple:
             if len(key) != 2:
