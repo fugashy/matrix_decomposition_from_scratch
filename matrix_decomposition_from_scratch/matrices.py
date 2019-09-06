@@ -59,7 +59,7 @@ class Matrix():
             if type(key[0]) is not int or type(key[0]) != type(key[1]):
                 raise TypeError(
                     'Type of index should be int\n'
-                    'Slicing is not supported yes...')
+                    'Slicing is not supported yet...')
 
             return self.data[key[0]][key[1]]
         elif type(key) is int:
@@ -67,7 +67,7 @@ class Matrix():
         else:
             raise TypeError(
                 'Type of index should be int\n'
-                'Slicing is not supported yes...')
+                'Slicing is not supported yet...')
 
     def __repr__(self):
         return self.__str__()
