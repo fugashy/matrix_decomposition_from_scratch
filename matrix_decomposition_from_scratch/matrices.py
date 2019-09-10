@@ -148,20 +148,29 @@ class Matrix():
 
     def __add__(self, other):
         u"""全要素をそれぞれ加算する"""
+        if isscalar(other):
+            return Matrix(self._calc_all_elements(
+                other, lambda l, r: l + r))
         self._verificate_shape_is_same(other)
-        return Matrix(self._calc_all_elements(
+        return Matrix(self._calc_all_elements_of_matrix(
             other, lambda l, r: l + r))
 
     def __sub__(self, other):
         u"""全要素をそれぞれ減算する"""
+        if isscalar(other):
+            return Matrix(self._calc_all_elements(
+                other, lambda l, r: l - r))
         self._verificate_shape_is_same(other)
-        return Matrix(self._calc_all_elements(
+        return Matrix(self._calc_all_elements_of_matrix(
             other, lambda l, r: l - r))
 
     def __mul__(self, other):
         u"""全要素をそれぞれ乗算する"""
+        if isscalar(other):
+            return Matrix(self._calc_all_elements(
+                other, lambda l, r: l * r))
         self._verificate_shape_is_same(other)
-        return Matrix(self._calc_all_elements(
+        return Matrix(self._calc_all_elements_of_matrix(
             other, lambda l, r: l * r))
 
     def __truediv__(self, other):
@@ -169,15 +178,18 @@ class Matrix():
 
         なお，0除算エラーはpythonの挙げる例外に身を任せる
         """
+        if isscalar(other):
+            return Matrix(self._calc_all_elements(
+                other, lambda l, r: l / r))
         self._verificate_shape_is_same(other)
-        return Matrix(self._calc_all_elements(
+        return Matrix(self._calc_all_elements_of_matrix(
             other, lambda l, r: l / r))
 
     def _verificate_shape_is_same(self, other):
         if self.col != other.col or self.row != other.row:
             raise ValueError('Shape of both should be same')
 
-    def _calc_all_elements(self, other, operator):
+    def _calc_all_elements_of_matrix(self, other, operator):
         return \
             [
                 [
@@ -186,3 +198,16 @@ class Matrix():
                 ]
                 for ir in range(self.row)
             ]
+
+    def _calc_all_elements(self, o, operator):
+        return \
+            [
+                [
+                    operator(self[ir, ic], o)
+                    for ic in range(self.col)
+                ]
+                for ir in range(self.row)
+            ]
+
+def isscalar(o):
+    return type(o) is int or type(o) is float
