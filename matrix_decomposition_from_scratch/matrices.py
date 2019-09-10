@@ -106,7 +106,7 @@ class Matrix():
 
     def minor(self, row, col):
         u"""小行列式"""
-        return self.sub(row, col).det()
+        return self.sub(row, col).det() * pow(-1., row + col + 2)
 
     def __getitem__(self, key):
         if type(key) is tuple:
