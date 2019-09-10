@@ -91,6 +91,23 @@ class Matrix():
                 sum += (-1.)**i * self[0, i] * m.det()
             return sum
 
+    def sub(self, row, col):
+        u"""部分行列を作る"""
+        return Matrix(
+            [
+                [
+                    self[i, j]
+                    for j in range(self.col)
+                    if j != col
+                ]
+                for i in range(self.row)
+                if i != row
+            ])
+
+    def minor(self, row, col):
+        u"""小行列式"""
+        return self.sub(row, col).det()
+
     def __getitem__(self, key):
         if type(key) is tuple:
             if len(key) != 2:
