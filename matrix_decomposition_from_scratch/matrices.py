@@ -44,7 +44,7 @@ class Matrix():
                 [
                     sum(
                         [
-                            self.data[i][k] * other.data[k][j]
+                            self[i, k] * other[k, j]
                             for k in range(self.col)
                         ])
                     for j in range(other.col)
