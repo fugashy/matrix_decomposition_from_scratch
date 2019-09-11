@@ -12,7 +12,7 @@ class Matrix():
                 raise ValueError('All num of cols should be the same')
 
         # 全てfloat型にする
-        self.data = \
+        self._data = \
             [
                 [
                     float(value)
@@ -23,11 +23,11 @@ class Matrix():
 
     @property
     def row(self):
-        return len(self.data)
+        return len(self._data)
 
     @property
     def col(self):
-        return len(self.data[0])
+        return len(self._data[0])
 
     def dot(self, other):
         u"""InnerProductを計算する"""
@@ -79,16 +79,7 @@ class Matrix():
             # 再帰的に展開してサラスの公式が使えるところまで落とす
             sum = 0.0
             for i in range(self.row):
-                m = Matrix(
-                    [
-                        [
-                            self[k, j]
-                            for j in range(self.row)
-                            if j != i
-                        ]
-                        for k in range(1, self.row)
-                    ])
-                sum += (-1.)**i * self[0, i] * m.det()
+                sum += self.cofactor(i, 0)
             return sum
 
     def sub(self, row, col):
@@ -121,9 +112,9 @@ class Matrix():
                     'Type of index should be int\n'
                     'Slicing is not supported yet...')
 
-            return self.data[key[0]][key[1]]
+            return self._data[key[0]][key[1]]
         elif type(key) is int:
-            return self.data[key]
+            return self._data[key]
         else:
             raise TypeError(
                 'Type of index should be int\n'
@@ -134,7 +125,7 @@ class Matrix():
 
     def __str__(self):
         ret_str = '['
-        for ir, row_data in enumerate(self.data):
+        for ir, row_data in enumerate(self._data):
             if ir == 0:
                 ret_str += '[ '
             else:
@@ -143,7 +134,7 @@ class Matrix():
             for cols_value in row_data:
                 ret_str += str(cols_value) + ' '
 
-            if ir != len(self.data) - 1:
+            if ir != len(self._data) - 1:
                 ret_str += ']\n'
             else:
                 ret_str += ']'
@@ -197,7 +188,7 @@ class Matrix():
         return \
             [
                 [
-                    operator(self.data[ir][ic], other.data[ir][ic])
+                    operator(self._data[ir][ic], other._data[ir][ic])
                     for ic in range(self.col)
                 ]
                 for ir in range(self.row)
