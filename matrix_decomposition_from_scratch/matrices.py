@@ -39,7 +39,7 @@ class Matrix():
         if self.col != other.row:
             raise ValueError('dot requires the condiction self.col == self.row')
 
-        return \
+        return Matrix(
             [
                 [
                     sum(
@@ -50,7 +50,7 @@ class Matrix():
                     for j in range(other.col)
                 ]
                 for i in range(self.row)
-            ]
+            ])
 
     def det(self):
         u"""行列式を計算する
