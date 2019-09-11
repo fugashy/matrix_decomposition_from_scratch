@@ -106,7 +106,11 @@ class Matrix():
 
     def minor(self, row, col):
         u"""小行列式"""
-        return self.sub(row, col).det() * pow(-1., row + col + 2)
+        return self.sub(row, col).det()
+
+    def cofactor(self, row, col):
+        u"""余因子を計算する"""
+        return self[row, col] * pow(-1., row + col + 2) * self.minor(row, col)
 
     def __getitem__(self, key):
         if type(key) is tuple:
