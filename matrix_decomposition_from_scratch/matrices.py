@@ -22,6 +22,7 @@ class Matrix():
                 for row_data in data
             ]
 
+    u"""-----------------------Properties-----------------------------------"""
     @property
     def row(self):
         return len(self._data)
@@ -30,6 +31,7 @@ class Matrix():
     def col(self):
         return len(self._data[0])
 
+    u"""-----------------------Public methods-------------------------------"""
     def transpose(self):
         u"""転置行列を返す"""
         return Matrix(
@@ -155,6 +157,7 @@ class Matrix():
                 'Type of index should be int\n'
                 'Slicing is not supported yet...')
 
+    u"""-----------------------Overloads------------------------------------"""
     def __repr__(self):
         return self.__str__()
 
@@ -215,6 +218,7 @@ class Matrix():
         return Matrix(self._calc_all_elements_of_matrix(
             other, lambda l, r: l / r))
 
+    u"""-----------------------Private methods------------------------------"""
     def _verificate_shape_is_same(self, other):
         if self.col != other.col or self.row != other.row:
             raise ValueError('Shape of both should be same')
