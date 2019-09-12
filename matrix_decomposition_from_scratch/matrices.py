@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from sys import float_info
 
 class Matrix():
     def __init__(self, data):
@@ -81,6 +82,21 @@ class Matrix():
             for i in range(self.row):
                 sum += self.cofactor(i, 0) * self[i, 0]
             return sum
+
+    def inv(self):
+        u"""逆行列を計算する"""
+        determinant = self.det()
+        if abs(self.det()) < float_info.epsilon:
+            raise ValueError('Self determinant is almost zero')
+
+        return Matrix(
+            [
+                [
+                    self.cofactor(r, c)
+                    for r in range(self.row)
+                ]
+                for c in range(self.col)
+            ]) / determinant
 
     def sub(self, row, col):
         u"""部分行列を作る"""
