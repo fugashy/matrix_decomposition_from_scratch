@@ -79,7 +79,7 @@ class Matrix():
             # 再帰的に展開してサラスの公式が使えるところまで落とす
             sum = 0.0
             for i in range(self.row):
-                sum += self.cofactor(i, 0)
+                sum += self.cofactor(i, 0) * self[i, 0]
             return sum
 
     def sub(self, row, col):
@@ -101,7 +101,7 @@ class Matrix():
 
     def cofactor(self, row, col):
         u"""余因子を計算する"""
-        return self[row, col] * pow(-1., row + col + 2) * self.minor(row, col)
+        return pow(-1., row + col + 2) * self.minor(row, col)
 
     def __getitem__(self, key):
         if type(key) is tuple:
