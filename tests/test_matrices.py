@@ -52,3 +52,15 @@ class MatrixTests(TestCase):
         self.assertEqual(t_row, np_mat.shape[0])
         self.assertEqual(t_col, np_mat.shape[1])
 
+    def test_transpose(self):
+        # setup
+        test_list = self._generate_random_list()
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # excersise
+        transposed_test_mat = test_mat.transpose()
+        transposed_np_mat = np_mat.transpose()
+
+        # verificate
+        self._compare_all_elements(transposed_test_mat, transposed_np_mat)

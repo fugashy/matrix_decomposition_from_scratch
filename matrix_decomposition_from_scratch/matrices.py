@@ -38,9 +38,9 @@ class Matrix():
             [
                 [
                     self[c, r]
-                    for c in range(self.col)
+                    for c in range(self.row)
                 ]
-                for r in range(self.row)
+                for r in range(self.col)
             ])
 
     def trace(self):
