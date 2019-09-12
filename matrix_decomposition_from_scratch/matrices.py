@@ -41,6 +41,14 @@ class Matrix():
                 for r in range(self.row)
             ])
 
+    def trace(self):
+        u"""トレースを返す
+
+        対角成分の総和
+        """
+        trace_id = min([self.col, self.row])
+        return sum([self[i, i] for i in range(trace_id)])
+
     def dot(self, other):
         u"""InnerProductを計算する"""
         # 同じ型同士でなければならない
