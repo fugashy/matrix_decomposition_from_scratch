@@ -12,12 +12,12 @@ class MatrixTests(TestCase):
     def _compare_all_elements(self, data, model):
         for r in range(data.row):
             for c in range(data.col):
-                self.assertAlmostEqual(
-                    data[r, c], model[r, c], float_info.epsilon)
+                self.assertAlmostEqual(data[r, c], model[r, c])
 
-    def _generate_random_list(self):
-        row = math.ceil(random.random() * 10)
-        col = math.ceil(random.random() * 10)
+    def _generate_random_list(self, row=None, col=None):
+        if row is None or col is None:
+            row = math.ceil(random.random() * 10)
+            col = math.ceil(random.random() * 10)
         return \
             [
                 [
@@ -74,3 +74,26 @@ class MatrixTests(TestCase):
         trace_np = np_mat.trace()
 
         self.assertAlmostEqual(trace_test, trace_np)
+
+    def test_dot_invalid(self):
+        # setup
+        test_list = self._generate_random_list(3, 4))
+        test_mat = Matrix(test_list)
+
+        # excersise and verificate
+        with self.assertRaises(ValueError):
+            test_mat.dot(test_mat)
+
+    def test_dot_valid(self):
+        # setup
+        test_list = self._generate_random_list()
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # excersise
+        test_dot = test_mat.dot(test_mat.transpose())
+        np_dot = np_mat.dot(np_mat.transpose())
+
+        # verificate
+        self._compare_all_elements(test_dot, np_dot)
+        self.assertEqual(test_dot.row, test_dot.col)
