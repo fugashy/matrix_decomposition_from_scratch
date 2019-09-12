@@ -30,6 +30,17 @@ class Matrix():
     def col(self):
         return len(self._data[0])
 
+    def transpose(self):
+        u"""転置行列を返す"""
+        return Matrix(
+            [
+                [
+                    self[c, r]
+                    for c in range(self.col)
+                ]
+                for r in range(self.row)
+            ])
+
     def dot(self, other):
         u"""InnerProductを計算する"""
         # 同じ型同士でなければならない
