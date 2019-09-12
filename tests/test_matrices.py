@@ -77,7 +77,7 @@ class MatrixTests(TestCase):
 
     def test_dot_invalid(self):
         # setup
-        test_list = self._generate_random_list(3, 4))
+        test_list = self._generate_random_list(3, 4)
         test_mat = Matrix(test_list)
 
         # excersise and verificate
