@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import math
 import numpy as np
+import numpy.linalg as LA
 import random
 from sys import float_info
 from unittest import TestCase
@@ -97,3 +98,25 @@ class MatrixTests(TestCase):
         # verificate
         self._compare_all_elements(test_dot, np_dot)
         self.assertEqual(test_dot.row, test_dot.col)
+
+    def test_det_invalid(self):
+        # setup
+        test_list = self._generate_random_list(3, 4)
+        test_mat = Matrix(test_list)
+
+        # excersise and verificate
+        with self.assertRaises(ValueError):
+            test_mat.det()
+
+    def test_det_valid(self):
+        # setup
+        test_list = self._generate_random_list(5, 5)
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # excersise
+        test_det = test_mat.det()
+        np_det = LA.det(np_mat)
+
+        # verify
+        self.assertAlmostEqual(test_det, np_det)
