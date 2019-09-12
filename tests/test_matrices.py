@@ -30,7 +30,6 @@ class MatrixTests(TestCase):
     def test_init_valid(self):
         # setup
         test_list = self._generate_random_list()
-        print(test_list)
         test_mat = Matrix(test_list)
         np_mat = np.array(test_list)
 
@@ -64,3 +63,14 @@ class MatrixTests(TestCase):
 
         # verificate
         self._compare_all_elements(transposed_test_mat, transposed_np_mat)
+
+    def test_trance(self):
+        # setup
+        test_list = self._generate_random_list()
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        trace_test = test_mat.trace()
+        trace_np = np_mat.trace()
+
+        self.assertAlmostEqual(trace_test, trace_np)
