@@ -138,6 +138,7 @@ class Matrix():
         u"""余因子を計算する"""
         return pow(-1., row + col + 2) * self.minor(row, col)
 
+    u"""-----------------------Overloads------------------------------------"""
     def __getitem__(self, key):
         if type(key) is tuple:
             if len(key) != 2:
@@ -155,7 +156,6 @@ class Matrix():
                 'Type of index should be int\n'
                 'Slicing is not supported yet...')
 
-    u"""-----------------------Overloads------------------------------------"""
     def __repr__(self):
         return self.__str__()
 
