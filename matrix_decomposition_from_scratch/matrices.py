@@ -80,7 +80,6 @@ class Matrix():
         正方行列にのみ定義された量である
 
         3x3まではサラスの公式を使う
-        それよりも大きい行列の場合は展開する
         """
         if self.col != self.row:
             raise ValueError('Col and Row should be the same to compute determinant')
@@ -98,7 +97,6 @@ class Matrix():
                 (self[0, 1] * self[1, 0] * self[2, 2]) - \
                 (self[0, 2] * self[1, 1] * self[2, 0])
         else:
-            # 再帰的に展開してサラスの公式が使えるところまで落とす
             sum = 0.0
             for i in range(self.row):
                 sum += self.cofactor(i, 0) * self[i, 0]
