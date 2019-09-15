@@ -22,7 +22,7 @@ class MatrixTests(TestCase):
         return \
             [
                 [
-                    random.random()
+                    random.random() * 100.
                     for i in range(col)
                 ]
                 for j in range(row)
@@ -119,4 +119,4 @@ class MatrixTests(TestCase):
         np_det = LA.det(np_mat)
 
         # verify
-        self.assertAlmostEqual(test_det, np_det)
+        self.assertAlmostEqual(test_det, np_det, places=5)
