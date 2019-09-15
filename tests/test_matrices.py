@@ -119,4 +119,48 @@ class MatrixTests(TestCase):
         np_det = LA.det(np_mat)
 
         # verify
-        self.assertAlmostEqual(test_det, np_det, places=5)
+        self.assertAlmostEqual(test_det, np_det, places=3)
+
+    def test_inv_invalid_shape(self):
+        # setup
+        test_list = self._generate_random_list(3, 4)
+        test_mat = Matrix(test_list)
+
+        # excersise and verificate
+        with self.assertRaises(ValueError):
+            test_mat.inv()
+
+    def test_inv_invalid_value(self):
+        # setup
+        test_list = \
+            [
+                [
+                    j + 5 * i
+                    for j in range(5)
+                ]
+                for i in range(5)
+            ]
+        test_mat = Matrix(test_list)
+
+        # excersise and verificate
+        with self.assertRaises(ValueError):
+            test_mat.inv()
+
+    def test_inv_invalid_value(self):
+        # setup
+        test_list = \
+            [
+                [1., 2., 3., 4.],
+                [8., 7., 6., 8.],
+                [9., 12., 11., 12.],
+                [16., 15., 14., 13.],
+            ]
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # excersise
+        test_inv = test_mat.inv()
+        np_inv = LA.inv(np_mat)
+
+        # verify
+        self._compare_all_elements(test_inv, np_inv)
