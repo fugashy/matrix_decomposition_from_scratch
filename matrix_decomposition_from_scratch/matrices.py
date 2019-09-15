@@ -138,6 +138,33 @@ class Matrix():
         u"""余因子を計算する"""
         return pow(-1., row + col + 2) * self.minor(row, col)
 
+    TRI_UPPER=0
+    TRI_LOWER=1
+
+    def triangular(self, mode=TRI_UPPER, include_diagonals=True):
+        u"""三角行列を返す
+
+        上か下か
+        対角成分を含むか含まないか
+
+        以上を設定できる
+        デフォルト設定は，対角成分を含む上三角行列
+        """
+        ret = Matrix([[ 0.0 for c in range(self.col)] for r in range(self.row)])
+        compare_index = lambda r, c: c >= r
+        if mode == self.TRI_UPPER and not include_diagonals:
+            compare_index = lambda r, c: c > r
+        elif mode == self.TRI_LOWER and include_diagonals:
+            compare_index = lambda r, c: c <= r
+        elif mode == self.TRI_LOWER and not include_diagonals:
+            compare_index = lambda r, c: c < r
+
+        for r in range(ret.row):
+            for c in range(ret.col):
+                if compare_index(r, c):
+                    ret._data[r][c] = self[r, c]
+        return ret
+
     u"""-----------------------Overloads------------------------------------"""
     def __getitem__(self, key):
         if type(key) is tuple:
