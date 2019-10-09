@@ -34,7 +34,7 @@ class MatrixTests(TestCase):
         test_mat = Matrix(test_list)
         np_mat = np.array(test_list)
 
-        # excersise and verificate
+        # exercise and verify
         self._compare_all_elements(test_mat, np_mat)
 
 
@@ -44,11 +44,11 @@ class MatrixTests(TestCase):
         test_mat = Matrix(test_list)
         np_mat = np.array(test_list)
 
-        # excersise
+        # exercise
         t_row = test_mat.row
         t_col = test_mat.col
 
-        # verificate
+        # verify
         self.assertEqual(t_row, np_mat.shape[0])
         self.assertEqual(t_col, np_mat.shape[1])
 
@@ -57,10 +57,10 @@ class MatrixTests(TestCase):
         test_list = self._generate_random_list()
         test_mat = Matrix(test_list)
 
-        # excersise
+        # exercise
         test_tolist = test_mat.tolist()
 
-        # verificate
+        # verify
         self.assertEqual(test_list, test_tolist)
 
     def test_transpose(self):
@@ -69,11 +69,11 @@ class MatrixTests(TestCase):
         test_mat = Matrix(test_list)
         np_mat = np.array(test_list)
 
-        # excersise
+        # exercise
         transposed_test_mat = test_mat.transpose()
         transposed_np_mat = np_mat.transpose()
 
-        # verificate
+        # verify
         self._compare_all_elements(transposed_test_mat, transposed_np_mat)
 
     def test_trance(self):
@@ -92,7 +92,7 @@ class MatrixTests(TestCase):
         test_list = self._generate_random_list(3, 4)
         test_mat = Matrix(test_list)
 
-        # excersise and verificate
+        # exercise and verify
         with self.assertRaises(ValueError):
             test_mat.dot(test_mat)
 
@@ -102,11 +102,11 @@ class MatrixTests(TestCase):
         test_mat = Matrix(test_list)
         np_mat = np.array(test_list)
 
-        # excersise
+        # exercise
         test_dot = test_mat.dot(test_mat.transpose())
         np_dot = np_mat.dot(np_mat.transpose())
 
-        # verificate
+        # verify
         self._compare_all_elements(test_dot, np_dot)
         self.assertEqual(test_dot.row, test_dot.col)
 
@@ -115,7 +115,7 @@ class MatrixTests(TestCase):
         test_list = self._generate_random_list(3, 4)
         test_mat = Matrix(test_list)
 
-        # excersise and verificate
+        # exercise and verify
         with self.assertRaises(ValueError):
             test_mat.det()
 
@@ -125,7 +125,7 @@ class MatrixTests(TestCase):
         test_mat = Matrix(test_list)
         np_mat = np.array(test_list)
 
-        # excersise
+        # exercise
         test_det = test_mat.det()
         np_det = LA.det(np_mat)
 
@@ -137,7 +137,7 @@ class MatrixTests(TestCase):
         test_list = self._generate_random_list(3, 4)
         test_mat = Matrix(test_list)
 
-        # excersise and verificate
+        # exercise and verify
         with self.assertRaises(ValueError):
             test_mat.inv()
 
@@ -153,7 +153,7 @@ class MatrixTests(TestCase):
             ]
         test_mat = Matrix(test_list)
 
-        # excersise and verificate
+        # exercise and verify
         with self.assertRaises(ValueError):
             test_mat.inv()
 
@@ -169,7 +169,7 @@ class MatrixTests(TestCase):
         test_mat = Matrix(test_list)
         np_mat = np.array(test_list)
 
-        # excersise
+        # exercise
         test_inv = test_mat.inv()
         np_inv = LA.inv(np_mat)
 
