@@ -52,6 +52,17 @@ class MatrixTests(TestCase):
         self.assertEqual(t_row, np_mat.shape[0])
         self.assertEqual(t_col, np_mat.shape[1])
 
+    def test_tolist(self):
+        # setup
+        test_list = self._generate_random_list()
+        test_mat = Matrix(test_list)
+
+        # excersise
+        test_tolist = test_mat.tolist()
+
+        # verificate
+        self.assertEqual(test_list, test_tolist)
+
     def test_transpose(self):
         # setup
         test_list = self._generate_random_list()
