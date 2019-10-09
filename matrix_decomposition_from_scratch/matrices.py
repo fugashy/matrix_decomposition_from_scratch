@@ -32,6 +32,9 @@ class Matrix():
         return len(self._data[0])
 
     u"""-----------------------Public methods-------------------------------"""
+    def tolist(self):
+        return self._data
+
     def transpose(self):
         u"""転置行列を返す"""
         return Matrix(
