@@ -234,6 +234,10 @@ class Matrix():
         return Matrix(self._calc_all_elements_of_matrix(
             other, lambda l, r: l * r))
 
+    def __matmul__(self, other):
+        u"""行列積を行う"""
+        return self.dot(other)
+
     def __truediv__(self, other):
         u"""全要素をそれぞれ除算する
 

@@ -175,3 +175,17 @@ class MatrixTests(TestCase):
 
         # verify
         self._compare_all_elements(test_inv, np_inv)
+
+    def test_matmul(self):
+        # setup
+        test_list = self._generate_random_list()
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # exercise
+        test_dot = test_mat @ test_mat.transpose()
+        np_dot = np_mat @ np_mat.transpose()
+
+        # verify
+        self._compare_all_elements(test_dot, np_dot)
+        self.assertEqual(test_dot.row, test_dot.col)
