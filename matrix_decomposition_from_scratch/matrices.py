@@ -277,3 +277,16 @@ class Matrix():
 
 def isscalar(o):
     return type(o) is int or type(o) is float
+
+def eye(d):
+    if d < 2:
+        raise ValueError('d must be larger than 2 for generate eye matrix')
+
+    return Matrix(
+        [
+            [
+                1 if i == j else 0.
+                for i in range(d)
+            ]
+            for j in range(d)
+        ])

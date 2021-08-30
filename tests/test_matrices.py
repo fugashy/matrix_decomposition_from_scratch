@@ -7,6 +7,7 @@ from sys import float_info
 from unittest import TestCase
 
 from matrix_decomposition_from_scratch.matrices import Matrix
+import matrix_decomposition_from_scratch.matrices as matrices
 
 class MatrixTests(TestCase):
 
@@ -189,3 +190,15 @@ class MatrixTests(TestCase):
         # verify
         self._compare_all_elements(test_dot, np_dot)
         self.assertEqual(test_dot.row, test_dot.col)
+
+    def test_eye(self):
+        # setup
+        d = 3
+
+        # exercise
+        test_eye = matrices.eye(d)
+        np_eye = np.eye(d)
+
+        # verify
+        self._compare_all_elements(test_eye, np_eye)
+        self.assertEqual(test_eye.row, test_eye.col)
