@@ -290,3 +290,15 @@ def eye(d):
             ]
             for j in range(d)
         ])
+
+def argmax(mat):
+    max_val = -float_info.min
+    r = 0
+    c = 0
+    for ir in range(mat.row):
+        for ic in range(mat.col):
+            if mat[ir, ic] >= max_val:
+                max_val = mat[ir, ic]
+                r = ir
+                c = ic
+    return r * mat.col + c

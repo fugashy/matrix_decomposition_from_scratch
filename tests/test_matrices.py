@@ -202,3 +202,16 @@ class MatrixTests(TestCase):
         # verify
         self._compare_all_elements(test_eye, np_eye)
         self.assertEqual(test_eye.row, test_eye.col)
+
+    def test_argmax(self):
+        # setup
+        test_list = self._generate_random_list()
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # exercise
+        test_arg = matrices.argmax(test_mat)
+        np_arg = np.argmax(np_mat.reshape(1, np_mat.shape[0] * np_mat.shape[1]))
+
+        # verify
+        self.assertEqual(test_arg, np_arg)
