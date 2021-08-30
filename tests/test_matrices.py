@@ -16,14 +16,14 @@ class MatrixTests(TestCase):
             for c in range(data.col):
                 self.assertAlmostEqual(data[r, c], model[r, c])
 
-    def _generate_random_list(self, row=None, col=None):
+    def _generate_random_list(self, a=-1., b=1., row=None, col=None):
         if row is None or col is None:
             row = math.ceil(random.random() * 10)
             col = math.ceil(random.random() * 10)
         return \
             [
                 [
-                    random.random() * 100.
+                    random.uniform(a, b)
                     for i in range(col)
                 ]
                 for j in range(row)
@@ -90,7 +90,7 @@ class MatrixTests(TestCase):
 
     def test_dot_invalid(self):
         # setup
-        test_list = self._generate_random_list(3, 4)
+        test_list = self._generate_random_list(row=3, col=4)
         test_mat = Matrix(test_list)
 
         # exercise and verify
@@ -113,7 +113,7 @@ class MatrixTests(TestCase):
 
     def test_det_invalid(self):
         # setup
-        test_list = self._generate_random_list(3, 4)
+        test_list = self._generate_random_list(row=3, col=4)
         test_mat = Matrix(test_list)
 
         # exercise and verify
@@ -122,7 +122,7 @@ class MatrixTests(TestCase):
 
     def test_det_valid(self):
         # setup
-        test_list = self._generate_random_list(5, 5)
+        test_list = self._generate_random_list(row=5, col=5)
         test_mat = Matrix(test_list)
         np_mat = np.array(test_list)
 
@@ -135,7 +135,7 @@ class MatrixTests(TestCase):
 
     def test_inv_invalid_shape(self):
         # setup
-        test_list = self._generate_random_list(3, 4)
+        test_list = self._generate_random_list(row=3, col=4)
         test_mat = Matrix(test_list)
 
         # exercise and verify
@@ -215,3 +215,18 @@ class MatrixTests(TestCase):
 
         # verify
         self.assertEqual(test_arg, np_arg)
+
+    def test_abs(self):
+        # setup
+        test_list = self._generate_random_list()
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # exercise
+        test_abs = matrices.abs(test_mat)
+        np_abs = np.abs(np_mat)
+
+        # verify
+        self._compare_all_elements(test_abs, np_abs)
+        self.assertEqual(test_mat.row, np_mat.shape[0])
+        self.assertEqual(test_mat.col, np_mat.shape[1])

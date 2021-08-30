@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from sys import float_info
+import math
 
 class Matrix():
     def __init__(self, data):
@@ -108,7 +109,7 @@ class Matrix():
     def inv(self):
         u"""逆行列を計算する"""
         determinant = self.det()
-        if abs(self.det()) < float_info.epsilon:
+        if math.fabs(self.det()) < float_info.epsilon:
             raise ValueError('Self determinant is almost zero')
 
         return Matrix(
@@ -302,3 +303,13 @@ def argmax(mat):
                 r = ir
                 c = ic
     return r * mat.col + c
+
+def abs(mat):
+    return Matrix(
+        [
+            [
+                math.fabs(mat[ir, ic])
+                for ic in range(mat.col)
+            ]
+            for ir in range(mat.row)
+        ])
