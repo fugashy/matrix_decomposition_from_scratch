@@ -321,7 +321,7 @@ def argmax(mat):
     c = 0
     for ir in range(mat.row):
         for ic in range(mat.col):
-            if mat[ir, ic] >= max_val:
+            if mat[ir, ic] > max_val:
                 max_val = mat[ir, ic]
                 r = ir
                 c = ic
@@ -341,6 +341,6 @@ def max(mat):
     max_val = -float_info.min
     for ir in range(mat.row):
         for ic in range(mat.col):
-            if mat[ir, ic] >= max_val:
+            if mat[ir, ic] > max_val:
                 max_val = mat[ir, ic]
     return max_val
