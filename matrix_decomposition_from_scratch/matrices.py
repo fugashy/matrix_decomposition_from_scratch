@@ -169,6 +169,29 @@ class Matrix():
                     ret._data[r][c] = self[r, c]
         return ret
 
+    def eigen(self):
+        u"""Compute eigen vector and values
+
+        Reference:
+            https://ensekitt.hatenablog.com/entry/2018/07/19/200000
+        """
+        pass
+
+    def reshape(self, r, c):
+        if r <= 0 or c <= 0:
+            raise ValueError('r and c must be larger than 0 to reshape mat')
+
+        vec = [self._data[ir][ic] for ir in range(self.row) for ic in range(self.col)]
+        return Matrix(
+            [
+                [
+                    vec[ir * c + ic]
+                    for ic in range(c)
+                ]
+                for ir in range(r)
+            ])
+
+
     u"""-----------------------Overloads------------------------------------"""
     def __getitem__(self, key):
         if type(key) is tuple:
@@ -313,3 +336,11 @@ def abs(mat):
             ]
             for ir in range(mat.row)
         ])
+
+def max(mat):
+    max_val = -float_info.min
+    for ir in range(mat.row):
+        for ic in range(mat.col):
+            if mat[ir, ic] >= max_val:
+                max_val = mat[ir, ic]
+    return max_val

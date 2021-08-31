@@ -230,3 +230,33 @@ class MatrixTests(TestCase):
         self._compare_all_elements(test_abs, np_abs)
         self.assertEqual(test_mat.row, np_mat.shape[0])
         self.assertEqual(test_mat.col, np_mat.shape[1])
+
+    def test_reshape(self):
+        # setup
+        row_list = [1, 8, 4,]
+        col_list = [16, 2, 4]
+        test_list = self._generate_random_list(row=2, col=8)
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # exercise and verify
+        for to_row, to_col in zip(row_list, col_list):
+            test_reshape = test_mat.reshape(to_row, to_col)
+            np_reshape = np_mat.reshape(to_row, to_col)
+
+            self._compare_all_elements(test_reshape, np_reshape)
+            self.assertEqual(test_reshape.row, np_reshape.shape[0])
+            self.assertEqual(test_reshape.col, np_reshape.shape[1])
+
+    def test_max(self):
+        # setup
+        test_list = self._generate_random_list()
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # exercise
+        test_max = matrices.max(test_mat)
+        np_max = np.max(np_mat)
+
+        # verify
+        self.assertEqual(np_max, test_max)
