@@ -250,7 +250,7 @@ class MatrixTests(TestCase):
 
     def test_max(self):
         # setup
-        test_list = self._generate_random_list()
+        test_list = self._generate_random_list(row=4, col=3)
         test_mat = Matrix(test_list)
         np_mat = np.array(test_list)
 
@@ -260,3 +260,64 @@ class MatrixTests(TestCase):
 
         # verify
         self.assertEqual(np_max, test_max)
+
+    def test_eigen_jacob(self):
+        # setup
+        test_list = [
+            [[1, 2, 3],
+             [2, 4, 5],
+             [3, 5, 1]],
+            [[1, 2, 3, 4],
+             [2, 5, 4, 0],
+             [3, 4, 1, 1],
+             [4, 0, 1, 2]]]
+        # Numpyの結果とベクトルの並びが違うので，参考ソースとの結果を比較する
+        # Rigen values and vectors have no restricted alignment.
+        # So I compare my result with reference code's one.
+        expected_list = [
+            {
+                'val': np.array([0.03424156, 9.15554844, -3.18979]),
+                'vec': np.array([[0.84846243,  -0.52376469, 0.07603987],
+                                 [0.38907681,  0.71466558,  0.58126788],
+                                 [-0.35879067, -0.4635986,  0.81015159]])
+            },
+            {
+                'val': np.array([-3.2732641567063494, 9.584292205173988, -1.5548070077212375, 4.243778959253601]),
+                'vec': np.array(
+                    [[0.7514391522717447,  0.03374071623848818, -0.44550604070521777, -0.48551532642749406],
+                     [0.47493891922778086, 0.6475162083223736,   0.5046314170201278,  0.31702194863892624],
+                     [0.18749368737154454, -0.5042468744699627,  0.7325633929135483,  -0.41705165405029304],
+                     [0.41787359408281666, -0.5703677880234859, -0.101105766474563,   0.699885611896042]])
+            }]
+
+        # exercise and verify
+        for mat, expected in zip(test_list, expected_list):
+            test_mat = Matrix(mat)
+
+            # exercise
+            test_val, test_vec = test_mat.eigen(method='jacob')
+
+            # verify
+            self.assertEqual(len(expected['val']), test_val.col)
+            self.assertEqual(1, test_val.row)
+            for v, e in zip(test_val[0], expected['val']):
+                self.assertAlmostEqual(v, e)
+
+            self.assertEqual(expected['vec'].shape[0], test_vec.row)
+            self.assertEqual(expected['vec'].shape[1], test_vec.col)
+            for r in range(test_vec.row):
+                for c in range(test_vec.col):
+                    self.assertAlmostEqual(expected['vec'][r, c], test_vec[r, c])
+
+    def test_diag_mat(self):
+        # setup
+        test_list = self._generate_random_list(row=4, col=3)
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # exercise
+        test_diag = test_mat.diag()
+        np_diag = np.diag(np_mat)
+
+        # verify
+        self._compare_all_elements(test_diag, np.matrix(np_diag))

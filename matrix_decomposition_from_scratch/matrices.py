@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+from copy import deepcopy
 from sys import float_info
 import math
+from math import cos, sin
 
 class Matrix():
     def __init__(self, data):
@@ -169,13 +171,77 @@ class Matrix():
                     ret._data[r][c] = self[r, c]
         return ret
 
-    def eigen(self):
-        u"""Compute eigen vector and values
+    def eigen(self, method='jacob'):
+        u"""Compute eigen vector and values"""
+        methods = {
+            'jacob': self._eigen_jacob,
+            'qr': self._eigen_qr,
+            'power': self._eigen_power
+            }
+        return methods[method]()
 
-        Reference:
-            https://ensekitt.hatenablog.com/entry/2018/07/19/200000
+    def _eigen_jacob(self):
+        u"""
+        https://ensekitt.hatenablog.com/entry/2018/07/19/200000
         """
-        pass
+        inveye = -1.0 * (eye(self.row) - 1)
+        tol = 1e-10
+
+        R = eye(self.row)
+
+        X = deepcopy(self)
+        for i in range(100):
+            # 最大値の抽出
+            absval = abs(X * inveye).reshape(1, X.row * X.col)
+            amax = max(absval)
+            if amax < 1e-10:
+                break
+
+            aindex = argmax(absval)
+            r = int(aindex / X.row)
+            c = int(aindex % X.row)
+
+            if X[r, r] - X[c, c] == 0:
+                theta = 0.25 * math.pi
+            else:
+                theta = 0.5 * math.atan(-2.0 * X[r, c] / (X[r, r] - X[c, c]))
+
+            new_X = deepcopy(X)
+            for k in range(X.row):
+                new_X[r, k] = X[r, k] * cos(theta) - X[c, k] * sin(theta)
+                new_X[k, r] = new_X[r, k]
+                new_X[c, k] = X[r, k] * sin(theta) + X[c, k] * cos(theta)
+                new_X[k, c] = new_X[c, k]
+
+            new_X[r, r] = \
+                (X[r, r] + X[c, c]) / 2. + \
+                (X[r, r] - X[c, c]) / 2. * cos(2 * theta) - \
+                X[r, c] * sin(2 * theta)
+            new_X[c, c] = \
+                (X[r, r] + X[c, c]) / 2. - \
+                (X[r, r] - X[c, c]) / 2. * cos(2 * theta) + \
+                X[r, c] * sin(2 * theta)
+            new_X[r, c] = 0.
+            new_X[c, r] = 0.
+            X = deepcopy(new_X)
+
+            G = eye(X.row)
+            G[r, r] = cos(theta)
+            G[r, c] = sin(theta)
+            G[c, r] = -sin(theta)
+            G[c, c] = cos(theta)
+            R = R @ G
+
+        return diag(X), R.transpose()
+
+    def _eigen_qr(self):
+        raise NotImplementedError
+
+    def _eigen_power(self):
+        u"""
+        https://qiita.com/sci_Haru/items/e5278b45ab396424ad86
+        """
+        raise NotImplementedError
 
     def reshape(self, r, c):
         if r <= 0 or c <= 0:
@@ -191,6 +257,8 @@ class Matrix():
                 for ir in range(r)
             ])
 
+    def diag(self):
+        return diag(self)
 
     u"""-----------------------Overloads------------------------------------"""
     def __getitem__(self, key):
@@ -209,6 +277,18 @@ class Matrix():
             raise TypeError(
                 'Type of index should be int\n'
                 'Slicing is not supported yet...')
+
+    def __setitem__(self, key, value):
+        if type(key) is tuple:
+            if len(key) != 2:
+                raise IndexError('If you access the element, length of indices should be 2')
+            if type(key[0]) is not int or type(key[0]) != type(key[1]):
+                raise TypeError(
+                    'Type of index should be int\n'
+                    'Slicing is not supported yet...')
+            if type(value) is not int and type(value) is not float:
+                raise TypeError('value to be set must be scalar')
+            self._data[key[0]][key[1]] = value
 
     def __repr__(self):
         return self.__str__()
@@ -257,6 +337,9 @@ class Matrix():
         self._verificate_shape_is_same(other)
         return Matrix(self._calc_all_elements_of_matrix(
             other, lambda l, r: l * r))
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
 
     def __matmul__(self, other):
         u"""行列積を行う"""
@@ -344,3 +427,12 @@ def max(mat):
             if mat[ir, ic] > max_val:
                 max_val = mat[ir, ic]
     return max_val
+
+def diag(obj):
+    if type(obj) is Matrix:
+        values = list()
+        for r, c in zip(range(obj.row), range(obj.col)):
+            values.append(obj[r, c])
+        return Matrix([values])
+    else:
+        raise NotImplementedError
