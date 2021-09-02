@@ -172,13 +172,30 @@ class Matrix():
         return ret
 
     def eigen(self, method='jacob'):
-        u"""Compute eigen vector and values"""
+        u"""Compute eigen vector and values
+
+        Note: Row major eigen vector
+        """
+        if self.row != self.col:
+            raise ValueError('Eigenvalues decomposition is defined for square matrix')
+
         methods = {
             'jacob': self._eigen_jacob,
             'qr': self._eigen_qr,
             'power': self._eigen_power
             }
-        return methods[method]()
+        vals, vec = methods[method]()
+        # sorting
+        # https://takumaro-blog.com/pc関連/【python】固有値分解・特異値分解のソート並び替え/
+        # TODO(fugashy) Implement by self
+        from numpy import argsort, array, matrix
+        npvals = array(vals)
+        index = argsort(vals)[::-1]
+
+        ret_vals = npvals[index].tolist()
+        ret_vec = Matrix(matrix(vec._data).T[index].tolist()).transpose()
+
+        return ret_vals, ret_vec
 
     def _eigen_jacob(self):
         u"""
@@ -232,7 +249,8 @@ class Matrix():
             G[c, c] = cos(theta)
             R = R @ G
 
-        return diag(X), R.transpose()
+        # col of R is one of eigen vector
+        return diag(X)[0], R
 
     def _eigen_qr(self):
         raise NotImplementedError
@@ -345,6 +363,9 @@ class Matrix():
         u"""行列積を行う"""
         return self.dot(other)
 
+    def __rmatmul__(self, other):
+        return self.dot(other)
+
     def __truediv__(self, other):
         u"""全要素をそれぞれ除算する
 
@@ -434,5 +455,13 @@ def diag(obj):
         for r, c in zip(range(obj.row), range(obj.col)):
             values.append(obj[r, c])
         return Matrix([values])
-    else:
+    elif type(obj) is list:
+        return Matrix(
+            [
+                [
+                    obj[i] if i == j else 0.
+                    for i in range(len(obj))
+                ]
+                for j in range(len(obj))
+            ])
         raise NotImplementedError
