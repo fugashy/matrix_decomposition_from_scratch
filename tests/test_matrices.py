@@ -331,3 +331,21 @@ class MatrixTests(TestCase):
 
         # verify
         self._compare_all_elements(test_diag, np.matrix(np_diag))
+
+    def test_svd(self):
+        # setup
+        test_mat = Matrix([
+            [1, 1, 1],
+            [1, 0, 0],
+            [1, 0, 0],
+            [0, 1, 1],
+            [0, 1, 0],
+            [0, 0, 1]])
+
+        # exercise
+        U, Z, V = test_mat.svd()
+
+        # verify
+        for r in range(test_mat.row):
+            for c in range(test_mat.col):
+                self.assertAlmostEqual(test_mat[r, c], (U @ Z @ V.transpose())[r, c])

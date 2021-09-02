@@ -197,6 +197,27 @@ class Matrix():
 
         return ret_vals, ret_vec
 
+    def svd(self):
+        u""" Singular value decomposition
+
+        https://ohke.hateblo.jp/entry/2017/12/14/230500
+        """
+        A = self.transpose() @ self
+        evals, evecs = A.eigen(method='jacob')
+
+        svals = [math.sqrt(e) for e in evals]
+
+        Z = diag(svals)
+        V = evecs
+        U = Matrix(
+            [
+                ((self @ Matrix([V.transpose()[i]]).transpose()) / svals[i]).transpose().tolist()[0]
+                for i in range(len(svals))
+            ]).transpose()
+
+        return U, Z, V
+
+
     def _eigen_jacob(self):
         u"""
         https://ensekitt.hatenablog.com/entry/2018/07/19/200000
