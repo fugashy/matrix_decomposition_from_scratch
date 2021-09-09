@@ -12,13 +12,10 @@ class Historic2D(object):
         u"""初期位置の設定
         init_points: 初期位置(list(Matrix))
         """
-        if type(init_points) is not list:
+        if type(init_points) is not Matrix:
             raise TypeError('Initial point should be list of Matrix')
-        for init_point in init_points:
-            if type(init_point) is not Matrix:
-                raise TypeError('Initial point should be list of Matrix')
-            if init_point.col != 1 or init_point.row != 2:
-                raise IndexError('Invalid shape point')
+        if init_points.row != 2:
+            raise IndexError('Invalid shape point')
 
         self._dists = [init_points]
 
@@ -26,10 +23,7 @@ class Historic2D(object):
 
     def transform(self, mat):
         u"""与えられた行列で最新の位置を線形変換し，リストに追加する"""
-        new_points = list()
-        for point in self._dists[-1]:
-            new_points.append(mat @ point)
-        self._dists.append(new_points)
+        self._dists.append(mat @ self._dists[-1])
 
     def plot(self):
         u"""保持している奇跡のプロット
@@ -39,8 +33,8 @@ class Historic2D(object):
         self._reset_viewer()
 
         for i, dist in enumerate(self._dists):
-            xs = [p[0, 0] for p in dist]
-            ys = [p[1, 0] for p in dist]
+            xs = dist[0]
+            ys = dist[1]
 
             self._ax.scatter(xs, ys, label=str(i), marker='.', alpha=0.5, color=cm.jet(i / len(self._dists)))
         pyplot.pause(0.01)
