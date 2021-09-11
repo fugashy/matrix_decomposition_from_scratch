@@ -349,3 +349,32 @@ class MatrixTests(TestCase):
         for r in range(test_mat.row):
             for c in range(test_mat.col):
                 self.assertAlmostEqual(test_mat[r, c], (U @ Z @ V.transpose())[r, c])
+
+    def test_mean(self):
+        # setup
+        test_data = [[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6]]
+        test_mat = Matrix(test_data)
+        np_mat = np.matrix(test_data)
+
+        # exercise
+        test_mean_axis_none = test_mat.mean()
+        test_mean_axis_1 = test_mat.mean(1)
+        np_mean_axis_none = np_mat.mean()
+        np_mean_axis_1 = np_mat.mean(1)
+
+        # verify
+        self.assertAlmostEqual(np_mean_axis_none, test_mean_axis_none)
+        self._compare_all_elements(test_mean_axis_1, np_mean_axis_1)
+
+    def test_outer(self):
+        # setup
+        test_list = self._generate_random_list(row=4, col=3)
+        test_mat = Matrix(test_list)
+        np_mat = np.array(test_list)
+
+        # exercise
+        test_outer = matrices.outer(test_mat, test_mat)
+        np_outer = np.outer(np_mat, np_mat)
+
+        # verify
+        self._compare_all_elements(test_outer, np_outer)

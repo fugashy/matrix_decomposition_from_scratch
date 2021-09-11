@@ -217,6 +217,16 @@ class Matrix():
 
         return U, Z, V
 
+    def mean(self, axis=None):
+        # 総和
+        if axis is None:
+            return sum(self.reshape(1, self.row * self.col).tolist()[0]) / (self.row * self.col)
+        # 行毎
+        elif axis == 1:
+            return Matrix([
+                    [sum(self[r]) / self.col]
+                    for r in range(self.row)
+                ])
 
     def _eigen_jacob(self):
         u"""
@@ -486,3 +496,11 @@ def diag(obj):
                 for j in range(len(obj))
             ])
         raise NotImplementedError
+
+def outer(a, b):
+    if type(a) is not Matrix or type(b) is not Matrix:
+        raise TypeError('outer method requres Matrix')
+
+    return a.reshape(a.col * a.row, 1) @ b.reshape(1, b.col * b.row)
+
+
